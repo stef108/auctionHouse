@@ -16,10 +16,6 @@ public abstract class User implements Observer {
 
 
     public abstract boolean deductListingFee();
-    
-    public void receiveNotification(String message) {
-        System.out.println("Notifaction for" + username + ":" + message);
-    }
 
     @Override
     public void update(String message) {

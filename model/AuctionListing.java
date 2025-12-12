@@ -1,5 +1,6 @@
 package model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,10 +73,35 @@ public class AuctionListing {
     public double getReservePrice() { return reservePrice; }
     public User getSeller() { return seller; }
 
+    public void closeAuction() { this.isOpen = false; }
+
+    public String getTimeRemaining() {
+        if (!isOpen()) {
+            return "ENDED";
+        }
+
+        Duration duration = Duration.between(LocalDateTime.now(), endTime);
+        long hours = duration.toHours();
+        long minutes = duration.toMinutesPart();
+
+        if (hours > 24) {
+            return (hours / 24) + " days left";
+        } else if (hours > 0) {
+            return hours + "h " + minutes + "m left";
+        } else {
+            return minutes + "m left (Ending Soon!)";
+        }
+    }
+
 
     @Override
     public String toString() {
-        return "Listing: " + title + " by [" + seller.getUsername() + "] Starts at: $" + startingPrice +
-               (reservePrice > 0 ? " (Reserve: $" + reservePrice + ")" : "");
+        String status = isOpen() ? "OPEN" : "CLOSED";
+        String bidderInfo = (currentHighBidder != null) ? " [High Bidder: " + currentHighBidder.getUsername() + "]" : " [No Bids]";
+
+        // Updated to include Time Remaining
+        return String.format("[%s] %-20s | Price: $%-8.2f | %-12s %s",
+                status, title, currentHighBid, getTimeRemaining(), bidderInfo);
     }
-}  
+
+}

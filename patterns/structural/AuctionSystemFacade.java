@@ -66,4 +66,64 @@ public class AuctionSystemFacade {
         }
         return null;
     }
+
+    public AuctionListing findListing(String title) {
+        return auctionDirectory.search(title);
+    }
+
+    public void closeAuction(String title) {
+        AuctionListing item = findListing(title);
+        if (item != null) {
+            // Check if current user is the owner
+            if (currentUser != null && item.getSeller().equals(currentUser)) {
+                item.closeAuction();
+                System.out.println("Auction '" + item.getTitle() + "' has been CLOSED.");
+            } else {
+                System.out.println("Error: Only the seller can close this auction.");
+            }
+        } else {
+            System.out.println("Error: Listing not found.");
+        }
+    }
+
+    public void seedData() {
+        // Create fake users using Factory
+        User u1 = UserFactory.createUser("Standard", "Gerald");
+        User u2 = UserFactory.createUser("VIP", "Linus torvalds");
+
+        // Create fake listings using Builder
+        AuctionListing l1 = new StandardListingBuilder(u1, "Gaming PC", 1200.00)
+                .setDescription("RTX 5090 TI PRO MAX ULTRA DIVINE EDITION, barely used")
+                .build();
+
+        AuctionListing l2 = new StandardListingBuilder(u2, "Exotic piece of paper", 50.00)
+                .setReservePrice(100.00)
+                .build();
+
+        auctionDirectory.addListing(l1);
+        auctionDirectory.addListing(l2);
+
+        System.out.println(" -> Seeded 2 Users");
+        System.out.println(" -> Seeded 2 Items");
+        System.out.println("-----------------------------------------");
+    }
+
+    public void showMarketStatus() {
+        System.out.println("\nCURRENT MARKET LISTINGS:");
+        var listings = auctionDirectory.getAllListings();
+        if (listings.isEmpty()) {
+            System.out.println("  (No items currently listed)");
+        } else {
+            for (AuctionListing item : listings) {
+                System.out.println("  - " + item.toString());
+            }
+        }
+
+        if (currentUser != null) {
+            System.out.println("\nLOGGED IN AS: " + currentUser.getUsername() +
+                    " (Balance: $" + currentUser.getBalance() + ")");
+        } else {
+            System.out.println("\nSTATUS: Not Logged In");
+        }
+    }
 }

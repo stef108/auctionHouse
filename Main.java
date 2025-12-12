@@ -1,30 +1,43 @@
 import model.AuctionListing;
+import patterns.behavioral.command.CommandFactory;
 import patterns.structural.AuctionSystemFacade;
+
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        AuctionSystemFacade market = new AuctionSystemFacade();
+        AuctionSystemFacade facade = new AuctionSystemFacade();
+        CommandFactory commandFactory = new CommandFactory(facade);
+        Scanner scanner = new Scanner(System.in);
 
-        //  Setup
-        market.loginOrRegister("Bob", "STANDARD");
-        market.createAuction("Retro Laptop", 100.00, "Good condition");
-        AuctionListing laptop = market.findFirstListing();
+        facade.seedData();
 
-        //  Alice Bids but Bob is the owner, so he might not be watching
-        market.loginOrRegister("Alice", "VIP");
-        market.placeBid(laptop, 200.00);
-        // Alice is now automatically added to the observer list.
+        System.out.println("==========================================");
+        System.out.println("      TERMINAL TRADER v1.0 - DASHBOARD    ");
+        System.out.println("==========================================");
 
-        System.out.println("\n--- Charlie enters the chat ---");
+        System.out.println("Commands: ");
+        System.out.println("  - login <name> <VIP/STANDARD>");
+        System.out.println("  - create <price> <title>");
+        System.out.println("  - bid <item> <amount>");
+        System.out.println("  - status");
+        System.out.println("  - exit");
+        System.out.println("============================");
 
-        // Charlie Bids
-        market.loginOrRegister("Charlie", "STANDARD");
-        market.placeBid(laptop, 250.00);
+        boolean running = true;
+        while (running) {
+            System.out.print("\n> ");
+            String input = scanner.nextLine();
 
-        // Alice should receive a notification automatically!
-        System.out.println("\n--- Alice fights back ---");
-        market.loginOrRegister("Alice", "VIP");
-        market.placeBid(laptop, 300.00);
-
+            if (input.equalsIgnoreCase("exit")) {
+                running = false;
+                System.out.println("Markets closed!");
+            } else if (input.equalsIgnoreCase("status")) {
+                facade.showMarketStatus();
+            } else {
+                commandFactory.executeCommand(input);
+            }
+        }
+        scanner.close();
     }
 }
