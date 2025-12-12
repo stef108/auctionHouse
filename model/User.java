@@ -1,6 +1,8 @@
 package model;
 
-public abstract class User {
+import patterns.behavioral.Observer;
+
+public abstract class User implements Observer {
     protected String username;
     protected double balance;
 
@@ -13,10 +15,15 @@ public abstract class User {
     public double getBalance() { return balance; }
 
 
-    public abstract void deductListingFee();
+    public abstract boolean deductListingFee();
     
     public void receiveNotification(String message) {
         System.out.println("Notifaction for" + username + ":" + message);
+    }
+
+    @Override
+    public void update(String message) {
+        System.out.println(">>> NOTIFICATION for " + username + ": " + message);
     }
 
 

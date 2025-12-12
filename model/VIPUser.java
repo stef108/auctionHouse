@@ -6,7 +6,8 @@ public class VIPUser extends User{
     }
 
     @Override
-    public void deductListingFee() {
+    public boolean deductListingFee() {
         System.out.println("VIP account: no fee deducted");
+        return true;
     }
 }

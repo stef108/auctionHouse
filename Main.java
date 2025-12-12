@@ -5,19 +5,26 @@ public class Main {
     public static void main(String[] args) {
         AuctionSystemFacade market = new AuctionSystemFacade();
 
-        // 1. Setup: Alice (VIP, $50000) and Bob (Standard, $100) list items
+        //  Setup
         market.loginOrRegister("Bob", "STANDARD");
-        market.createAuction("Old Book", 5.00, "Rare classic.");
-        AuctionListing book = market.findFirstListing();
+        market.createAuction("Retro Laptop", 100.00, "Good condition");
+        AuctionListing laptop = market.findFirstListing();
 
+        //  Alice Bids but Bob is the owner, so he might not be watching
         market.loginOrRegister("Alice", "VIP");
+        market.placeBid(laptop, 200.00);
+        // Alice is now automatically added to the observer list.
 
-        // 2. Bob attempts to bid (FAIL: Low Balance)
-        market.loginOrRegister("Bob", "STANDARD");
-        market.placeBid(book, 1000.00);
+        System.out.println("\n--- Charlie enters the chat ---");
 
-        // 3. Alice attempts to bid (SUCCESS)
+        // Charlie Bids
+        market.loginOrRegister("Charlie", "STANDARD");
+        market.placeBid(laptop, 250.00);
+
+        // Alice should receive a notification automatically!
+        System.out.println("\n--- Alice fights back ---");
         market.loginOrRegister("Alice", "VIP");
-        market.placeBid(book, 10.00);
+        market.placeBid(laptop, 300.00);
+
     }
 }

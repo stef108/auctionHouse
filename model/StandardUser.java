@@ -6,12 +6,14 @@ public class StandardUser extends User {
     }
 
     @Override
-    public void deductListingFee() {
-        if (balance >= 5000.0) {
-            balance -= 5000.0 ;
-            System.out.println("Standard account: $5000 listing fee deducted");
+    public boolean deductListingFee() {
+        if (balance >= 100.0) {
+            balance -= 100.0 ;
+            System.out.println("Standard account: $100 listing fee deducted");
+            return true;
         } else {
             System.out.println("Error: insufficient balance for listing fee");
+            return false;
         }
     }
 }

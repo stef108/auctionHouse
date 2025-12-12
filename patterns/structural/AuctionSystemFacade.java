@@ -33,7 +33,12 @@ public class AuctionSystemFacade {
             return;
         }
 
-        currentUser.deductListingFee();
+        boolean feePaid = currentUser.deductListingFee();
+
+        if (!feePaid) {
+            System.out.println("Transaction Aborted: Listing not created due to payment failure.");
+            return;
+        }
 
         AuctionListing newListing = new StandardListingBuilder(currentUser, title, price)
                 .setDescription(description)
@@ -57,7 +62,7 @@ public class AuctionSystemFacade {
 
     public AuctionListing findFirstListing() {
         if (!auctionDirectory.getAllListings().isEmpty()) {
-            return auctionDirectory.getAllListings().get(0);
+            return auctionDirectory.getAllListings().getFirst();
         }
         return null;
     }

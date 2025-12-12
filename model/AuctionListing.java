@@ -1,6 +1,10 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import patterns.behavioral.Observer;
 import patterns.creational.StandardListingBuilder;
 
 public class AuctionListing {
@@ -13,8 +17,10 @@ public class AuctionListing {
     private final double reservePrice;
     private final LocalDateTime endTime;
     private double currentHighBid;
-    private User currentHighBidder; // <--- The field we need
+    private User currentHighBidder;
     private boolean isOpen;
+
+    private List<Observer> observers = new ArrayList<>();
 
     public AuctionListing(StandardListingBuilder builder) {
         this.title = builder.getTitle();
@@ -28,7 +34,27 @@ public class AuctionListing {
         this.isOpen = true;
     }
 
+    public void registerObserver(Observer o) {
+        if (!observers.contains(o)) {
+            observers.add(o);
+             o.update("You are now watching: " + this.title);
+        }
+    }
+
+    private void notifyObservers(String message) {
+        for (Observer o : observers) {
+            o.update(message);
+        }
+    }
+
     public void updateToNewBid(User bidder, double amount) {
+        String msg = String.format("New bid on '%s': $%.2f by %s",
+                title, amount, bidder.getUsername());
+
+        notifyObservers(msg);
+
+        registerObserver(bidder);
+
         this.currentHighBid = amount;
         this.currentHighBidder = bidder;
     }
