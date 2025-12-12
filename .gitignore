@@ -1,0 +1,18 @@
+# compiled classes
+*.class
+
+# ideaj
+.idea/
+
+# IntelliJ workspace files
+*.iws
+*.iml
+*.ipr
+
+# Compilation output and temporary files created by IntelliJ
+out/
+
+# Local history files
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/shelf/
