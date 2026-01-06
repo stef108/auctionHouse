@@ -4,6 +4,8 @@ import model.User;
 import model.AuctionListing;
 import patterns.creational.StandardListingBuilder;
 import patterns.creational.UserFactory;
+import patterns.creational.StandardUserFactory;
+import patterns.creational.VIPUserFactory;
 import services.AuctionDirectory;
 import services.BankService;
 import services.IBiddingService;
@@ -22,8 +24,18 @@ public class AuctionSystemFacade {
         this.biddingService = new SecurityBiddingProxy(this.bankService);
     }
 
+
     public void loginOrRegister(String username, String type) {
-        this.currentUser = UserFactory.createUser(type, username);
+        //  Choose the Factory Strategy (The "Method" in Factory Method)
+        UserFactory factory;
+        if (type.equalsIgnoreCase("VIP")) {
+            factory = new VIPUserFactory();
+        } else {
+            factory = new StandardUserFactory();
+        }
+        // Delegate creation to that factory instance
+        this.currentUser = factory.create(username);
+
         System.out.println("--logged in as: " + currentUser.getUsername() + " (" + type + " ) | Balance: $" + currentUser.getBalance());
     }
 
@@ -100,9 +112,11 @@ public class AuctionSystemFacade {
     }
 
     public void seedData() {
-        // Create fake users using Factory
-        User u1 = UserFactory.createUser("Standard", "Gerald");
-        User u2 = UserFactory.createUser("VIP", "Linus torvalds");
+        UserFactory stdFactory = new StandardUserFactory();
+        UserFactory vipFactory = new VIPUserFactory();
+
+        User u1 = stdFactory.create("Gerald");
+        User u2 = vipFactory.create("Linus Torvalds");
 
         // Create fake listings using Builder
         AuctionListing l1 = new StandardListingBuilder(u1, "Gaming PC", 1200.00)

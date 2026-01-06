@@ -18,8 +18,9 @@ public class Main {
 
         System.out.println("Commands: ");
         System.out.println("  - login <name> <VIP/STANDARD>");
-        System.out.println("  - create <price> <title>");
+        System.out.println("  - create <price> <item>");
         System.out.println("  - bid <item> <amount>");
+        System.out.println("  - close <item>");
         System.out.println("  - status");
         System.out.println("  - exit");
         System.out.println("============================");

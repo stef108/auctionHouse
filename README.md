@@ -1,6 +1,6 @@
 #  A Console-Based Auction House
 
-**Auction house** is a simulation of a real-time marketplace that operates entirely within the command-line interface. It demonstrates how complex software architectures can be managed using industry-standard Design Patterns.
+**Auction house** is a simulation of a real-time marketplace that operates entirely within the command-line interface. It demonstrates how complex software architectures can be managed using Design Patterns.
 
 In this simulation, users can:
 * **Create Accounts:** Choose between 'Standard' (fee-based) or 'VIP' (fee-exempt) tiers.
@@ -20,9 +20,9 @@ This application is a **architectural demonstration** and does not implement a g
 ## 1. Creational Patterns (Object Creation)
 
 ### A. Factory Method Pattern
-* **Location:** `src/patterns/creational/UserFactory.java`
-* **Affected Files:** `src/model/User.java`, `src/model/StandardUser.java`, `src/model/VIPUser.java`
-* **Job:** Encapsulates the logic of creating different types of users (`Standard` vs `VIP`). Instead of the main program instantiating specific classes and setting manual starting balances, the client simply asks the factory to "create a VIP user," and the factory handles the initialization details and configuration.
+* **Location:** `src/patterns/creational/UserFactory.java` (Interface)
+* **Affected Files:** `src/patterns/creational/StandardUserFactory.java`, `src/patterns/creational/VIPUserFactory.java`
+* **Job:** Defines an interface (`UserFactory`) for creating users, but pushes the instantiation logic to subclasses. The `VIPUserFactory` specifically handles the creation of `VIPUser` objects with their high starting balance, while `StandardUserFactory` handles normal users. This ensures the client code works with the interface, not the implementation details.
 
 ### B. Builder Pattern
 * **Location:** `src/patterns/creational/StandardListingBuilder.java`
@@ -54,5 +54,9 @@ This application is a **architectural demonstration** and does not implement a g
 
 ### B. Command Pattern
 * **Location:** `src/patterns/behavioral/command/` (Folder)
-* **Affected Files:** `CommandFactory.java`, `BidCommand.java`, `LoginCommand.java`, `Command.java`
+* **Affected Files:** `CommandFactory.java`, `BidCommand.java`, `LoginCommand.java`, `Command.java`, `CloseCommand.java`,`SeedCommand.java`,`CreateListingCommand.java`,
 * **Job:** Encapsulates user requests as standalone objects. This decouples the user interface (text input) from the logic that executes the action. It allows the application to parse dynamic text inputs (like "bid Gaming PC 500") and map them to specific execution logic without populating the `Main` class with complex `if/else` statements.
+
+---
+#  Cooperation
+None
