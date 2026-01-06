@@ -73,16 +73,29 @@ public class AuctionSystemFacade {
 
     public void closeAuction(String title) {
         AuctionListing item = findListing(title);
-        if (item != null) {
-            // Check if current user is the owner
-            if (currentUser != null && item.getSeller().equals(currentUser)) {
+
+        if (item == null || !item.isOpen()) return;
+
+        // Settlement Logic
+        User winner = item.getHighBidder();
+        User seller = item.getSeller();
+        double finalPrice = item.getCurrentPrice();
+
+        if (winner != null) {
+            System.out.println("\n--- SETTLEMENT STARTED: " + item.getTitle() + " ---");
+
+            // CALL THE BANK SERVICE HERE
+            boolean success = bankService.transferFunds(winner, seller, finalPrice);
+
+            if (success) {
                 item.closeAuction();
-                System.out.println("Auction '" + item.getTitle() + "' has been CLOSED.");
+                System.out.println("Settlement Complete. Auction Closed.");
             } else {
-                System.out.println("Error: Only the seller can close this auction.");
+                System.out.println("CRITICAL: Buyer cannot pay! Auction remains open.");
             }
         } else {
-            System.out.println("Error: Listing not found.");
+            item.closeAuction();
+            System.out.println("Auction closed with no bids.");
         }
     }
 

@@ -18,8 +18,15 @@ public class BidCommand implements Command {
             return;
         }
 
-        String itemName = args[1];
-        String amountStr = args[2];
+        // Get amount
+        String amountStr = args[args.length - 1];
+
+        // get title
+        StringBuilder titleBuilder = new StringBuilder();
+        for (int i = 1; i < args.length - 1; i++) {
+            titleBuilder.append(args[i]).append(" ");
+        }
+        String itemName = titleBuilder.toString().trim();
 
         AuctionListing listing = facade.findListing(itemName);
         if (listing == null) {

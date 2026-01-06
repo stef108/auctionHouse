@@ -19,7 +19,7 @@ public class BiddingEngine implements IBiddingService {
             return false;
         }
 
-        //  CHECK: Are you outbidding yourself? (Optional realism)
+        //  CHECK: Are you outbidding yourself?
         if (bidder.equals(listing.getHighBidder())) {
             System.out.println("ENGINE: Fail. You are already the highest bidder!");
             return false;

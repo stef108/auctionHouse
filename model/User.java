@@ -17,6 +17,9 @@ public abstract class User implements Observer {
 
     public abstract boolean deductListingFee();
 
+    public void adjustBalance(double amount) {
+        this.balance += amount;
+    }
     @Override
     public void update(String message) {
         System.out.println(">>> NOTIFICATION for " + username + ": " + message);
