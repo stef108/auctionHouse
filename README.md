@@ -21,12 +21,16 @@ This application is a **architectural demonstration** and does not implement a g
 
 ### A. Factory Method Pattern
 * **Location:** `src/patterns/creational/UserFactory.java` (Interface)
-* **Affected Files:** `src/patterns/creational/StandardUserFactory.java`, `src/patterns/creational/VIPUserFactory.java`
+* **Affected Files:** * `src/patterns/creational/StandardUserFactory.java` (Concrete Creator)
+    * `src/patterns/creational/VIPUserFactory.java` (Concrete Creator)
+    * **`src/model/User.java` (Abstract Product)**
+    * **`src/model/StandardUser.java` (Concrete Product)**
+    * **`src/model/VIPUser.java` (Concrete Product)**
 * **Job:** Defines an interface (`UserFactory`) for creating users, but pushes the instantiation logic to subclasses. The `VIPUserFactory` specifically handles the creation of `VIPUser` objects with their high starting balance, while `StandardUserFactory` handles normal users. This ensures the client code works with the interface, not the implementation details.
 
 ### B. Builder Pattern
-* **Location:** `src/patterns/creational/StandardListingBuilder.java`
-* **Affected Files:** `src/patterns/creational/IListingBuilder.java`, `src/model/AuctionListing.java`
+* **Location:** `src/patterns/creational/StandardListingBuilder.java` (Concrete Builder)
+* **Affected Files:** `src/patterns/creational/IListingBuilder.java`, `src/model/AuctionListing.java` (Builder Interface)
 * **Job:** Solves the "Telescoping Constructor" problem for `AuctionListing` objects. An auction listing requires mandatory fields (title, price) but also has many optional parameters (description, reserve price, duration). The Builder allows these complex objects to be constructed step-by-step in a readable, fluent way (e.g., `.setReservePrice(100).build()`).
 
 ---
@@ -35,12 +39,15 @@ This application is a **architectural demonstration** and does not implement a g
 
 ### A. Facade Pattern
 * **Location:** `src/patterns/structural/AuctionSystemFacade.java`
-* **Affected Files:** `src/services/BankService.java`, `src/services/AuctionDirectory.java`, `Main.java`
+* **Affected Files:** `src/services/BankService.java`, `src/services/AuctionDirectory.java` (Subsystem Classes)
+* * `Main.java` (Client)
 * **Job:** Acts as a simplified "control panel" or entry point for the entire application. It hides the complexity of the underlying subsystems (Bank, Directory, User Creation, Proxy) from the `Main` class. The client interacts with simple methods like `facade.placeBid()` without needing to understand how the subsystems are wired together.
 
 ### B. Proxy Pattern
 * **Location:** `src/patterns/structural/SecurityBiddingProxy.java`
-* **Affected Files:** `src/services/IBiddingService.java`, `src/services/BiddingEngine.java`, `src/services/BankService.java`
+* * **Affected Files:** * `src/services/IBiddingService.java` (Subject Interface)
+* `src/services/BiddingEngine.java` (Real Subject)
+* `src/services/BankService.java` (Helper Service)
 * **Job:** Controls access to the critical `BiddingEngine`. The Proxy acts as a "security guard" that intercepts bid requests. It collaborates with the `BankService` to ensure the user has sufficient solvency *before* allowing the request to reach the real engine. This strictly separates validation logic from business logic.
 
 ---
